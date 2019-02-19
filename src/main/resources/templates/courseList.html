@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <link th:href="@{/webjars/bootstrap/4.1.1/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <title>Users</title>
+
+</head>
+<body>
+ <div class="container">
+
+
+<br>
+       <div class="row">
+         <h1> Spring Boot Pagination Example</h1>
+       </div>
+     <br>
+<div class="row"> <h3>Using Student Info</h3></div>
+     <div class="row">
+        <table class="table">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Marks</th>
+            </tr>
+            <tr th:each="course : ${courses}">
+                <td th:text="${course.name}"></td>
+                <td th:text="${course.categories}"></td>
+                <td th:text="${course.duration}"></td>
+            </tr>
+        </table>
+      </div>
+
+       <div class="row">
+           <div class="form-group col-md-1">
+              <select class="form-control pagination" id="pageSizeSelect">
+                  <option th:each="pageSize : ${pageSizeList}" th:text="${pageSize}" th:value="${pageSize}"
+                        th:selected="${pageSize} == ${recordPerPage}"></option>
+              </select>
+           </div>
+
+             <div th:if="${courses.totalPages != 1}" class="form-group col-md-11">
+                <nav aria-label="Page navigation example" class="pagination-centered">
+                  <ul class="pagination justify-content-center">
+                      <li th:class="${courses.number == 0} ? disabled" class="page-item">
+                          <a th:href="@{/(pageSize=${recordPerPage}, PageSerial=1)}" class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                      </li>
+                      <li th:class="${courses.number == 0} ? disabled" class="page-item">
+                           <a class="page-link" th:href="@{/(pageSize=${recordPerPage}, PageSerial=${courses.number})}">Previous</a></li>
+
+                      <li th:class="${courses.number == (PageSerial - 1)} ? 'active pointer-disabled'"
+                          th:each="PageSerial : ${#numbers.sequence(pager.startPage, pager.endPage)}"
+                          class="page-item">
+                           <a th:href="@{/(pageSize=${recordPerPage}, PageSerial=${PageSerial})}"
+                              th:text="${PageSerial}" class="page-link" href="#">
+                           </a>
+                      </li>
+
+                        <li th:class="${courses.number + 1 == courses.totalPages} ? disabled"
+                             class="page-item">
+                            <a class="page-link" th:href="@{/(pageSize=${recordPerPage}, PageSerial=${courses.number + 2})}">Next
+                            </a>
+                        </li>
+                      <li class="page-item" th:class="${courses.number + 1 == courses.totalPages} ? disabled">
+                          <a class="page-link" th:href="@{/(pageSize=${recordPerPage}, PageSerial=${courses.totalPages})}"
+                             aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+                          </a>
+                      </li>
+                   </ul>
+                </nav>
+             </div>
+       </div>
+ </div>
+
+ <script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.1.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
